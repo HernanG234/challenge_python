@@ -1,6 +1,9 @@
 import boto3
+import requests
+import requests_mock
+import pytest
 from moto import mock_aws
-from challenge.challenge_python import get_s3_objects, fn_caller
+from challenge.challenge_python import get_s3_objects, fn_caller, Helper
 
 
 @mock_aws
@@ -65,5 +68,32 @@ def test_fn_transcoder():
     pass
 
 
-def test_Helper():
+@pytest.fixture
+def helper():
+    helper = Helper()
+    helper.AUTHORIZATION_TOKEN = {
+        "access_token": "fake_access_token",
+        "token_type": "Bearer",
+        "expires_in": 3600,
+        "refresh_token": "fake_refresh_token",
+    }
+    return helper
+
+
+def test_Helper_search_images(helper, requests_mock):
+    requests_mock.get(
+        f"{helper.DOMAIN}/{helper.SEARCH_IMAGES_ENDPOINT}",
+        json={"results": ["image1", "image2"]},
+        status_code=200,
+    )
+    ret = helper.search_images()
+    assert ret.status_code == 200
+    assert ret.json() == {"results": ["image1", "image2"]}
+
+
+def test_Helper_get_image(helper, requests_mock):
+    pass
+
+
+def test_Helper_download_image(helper, requests_mock):
     pass

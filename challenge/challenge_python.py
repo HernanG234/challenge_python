@@ -203,7 +203,7 @@ class Helper:
 
         send = {"headers": headers, "params": kwargs}
 
-        response = request.get(requests, method)(URL, **send)
+        response = requests.get(URL, **send)
         return response
 
     def get_image(self, image_id, **kwargs):
@@ -218,7 +218,7 @@ class Helper:
 
         send = {"headers": headers, "params": kwargs}
 
-        response = request.get(requests, method)(URL, **send)
+        response = requests.get(URL, **send)
         return response
 
     def download_image(self, image_id, **kwargs):
@@ -233,5 +233,5 @@ class Helper:
 
         send = {"headers": headers, "data": kwargs}
 
-        response = request.post(requests, method)(URL, **send)
+        response = requests.post(URL, **send)
         return response
