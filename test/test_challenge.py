@@ -1,6 +1,5 @@
 import boto3
 from moto import mock_aws
-help("modules")
 from challenge.challenge_python import get_s3_objects
 
 @mock_aws
