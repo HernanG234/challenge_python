@@ -1,4 +1,6 @@
 # Python Challenge
+![python_challenge_tests]
+(https://github.com/HernanG234/challenge_python/actions/workflows/test.yml/badge.svg)
 
 This challenge was developed as part of an interview process.
 

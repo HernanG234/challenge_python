@@ -1,4 +1,4 @@
-   name: python-challenge-test
+   name: Python Challenge Tests
 
    on:
      push:
