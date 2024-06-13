@@ -59,6 +59,9 @@ def test_fn_caller():
 
 
 def test_fn_transcoder():
+    """
+    No new code written in this function, do not test it.
+    """
     pass
 
 

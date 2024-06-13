@@ -124,17 +124,51 @@ and returning based in its conditionals?
 
 
 def fn(config, w, h):
-    v = None
-    ar = w / h
+    """
+    Selects appropriate video presets based on the video's aspect ratio and width.
 
+    Parameters
+    ----------
+    config : dict
+        A dictionary containing different video presets.
+        - config["p"] : list
+            Presets for portrait videos (aspect ratio less than 1).
+        - config["l"] : list
+            Presets for landscape videos (aspect ratio greater than 4/3).
+        - config["s"] : list
+            Presets for standard videos (aspect ratio between 1 and 4/3).
+    w : int
+        The width of the video.
+    h : int
+        The height of the video.
+
+    Returns
+    -------
+    list
+        A list of dictionaries representing the selected presets that match the video's width
+        and aspect ratio criteria.
+
+    Notes
+    -----
+    The function assumes the config dictionary contains lists of presets, where each preset
+    is a dictionary with at least a "width" key.
+    """
+
+    v = None  # Initialize the variable to store the selected presets
+    ar = w / h  # Calculate the aspect ratio of the video
+
+    # Determine the type of video based on its aspect ratio and select appropriate presets
     if ar < 1:
+        # Portrait videos: select presets from config["p"]
         v = [r for r in config["p"] if r["width"] <= w]
     elif ar > 4 / 3:
+        # Landscape videos: select presets from config["l"]
         v = [r for r in config["l"] if r["width"] <= w]
     else:
+        # Standard videos: select presets from config["s"]
         v = [r for r in config["s"] if r["width"] <= w]
 
-    return v
+    return v  # Return the list of selected presets
 
 
 """
