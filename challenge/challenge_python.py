@@ -112,18 +112,8 @@ class Caller:
 
 
 def fn_caller(fn_to_call, *args):
-    result = None
 
-    if fn_to_call == "add":
-        result = Caller.add(*args)
-    if fn_to_call == "concat":
-        result = Caller.concat(*args)
-    if fn_to_call == "divide":
-        result = Caller.divide(*args)
-    if fn_to_call == "multiply":
-        result = Caller.multiply(*args)
-
-    return result
+    return getattr(Caller, fn_to_call)(*args)
 
 
 """
