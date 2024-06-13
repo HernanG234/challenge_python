@@ -1,0 +1,6 @@
+services:
+  challenge:
+    image: challenge:${TAG:-latest}
+    platform: linux/amd64
+    build:
+      context: .
