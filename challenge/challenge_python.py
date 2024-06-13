@@ -1,3 +1,5 @@
+import boto3
+
 """
 Refactor the next function using yield to return the array of objects found by the
 `s3.list_objects_v2` function that matches the given prefix.

@@ -4,4 +4,4 @@ WORKDIR app
 COPY . .
 RUN pip install -r requirements.txt
 
-CMD ["python", "challenge_python.py"]
+CMD ["python", "challenge/challenge_python.py"]
