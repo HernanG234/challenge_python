@@ -11,22 +11,22 @@ BUT we can run the tests provided to see that it's working code.
 
 1. Using `Make`:
 ```bash
-    $ make build
-    $ make test
+make build
+make test
 ```
 
 > OR
 
 2. Using `docker-compose`:
 ```bash
-    $ docker compose build
-    $ docker-compose run --entrypoint "pytest" -v "${PWD}":/app challenge
+docker compose build
+docker-compose run --entrypoint "pytest" -v "${PWD}":/app challenge
 ```
 
 ### Virtual Env
 ```bash
-    $ python -m venv .env
-    $ source .env/bin/activate
-    $ pip install -r requirements.txt
-    $ pytest
+python -m venv .env
+source .env/bin/activate
+pip install -r requirements.txt
+pytest
 ```
