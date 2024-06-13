@@ -20,12 +20,11 @@ def get_s3_objects(bucket, prefix=''):
         for obj in contents:
             key = obj['Key']
             if key.startswith(prefix):
-                object_list.append(obj)
+                yield obj
         next_token = resp.get('NextContinuationToken', None)
 
         if not next_token:
             break
-    return object_list
 
 """
 Please, full explain this function: document iterations, conditionals, and the
