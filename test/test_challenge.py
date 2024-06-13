@@ -38,6 +38,9 @@ def test_get_s3_objects():
 
 
 def test_fn():
+    """
+    No new code written in this function, do not test it.
+    """
     pass
 
 

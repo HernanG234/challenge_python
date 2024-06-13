@@ -29,41 +29,70 @@ function as a whole
 
 
 def fn(main_plan, obj, extensions=[]):
+    """
+    Processes a main plan and a list of items, taking into account additional extensions. The returned object is
+    probably used to update the quantities or remove items from a main list.
 
-    items = []
-    sp = False
-    cd = False
+    Parameters
+    ----------
+    main_plan : object
+        The main plan object containing an id attribute.
+    obj : dict
+        A dictionary containing items data. Each item is expected to have an id and price attribute.
+    extensions : list, optional
+        A list of dictionaries where each dictionary has 'price' (object with an id attribute)
+        and 'qty' (integer quantity) keys. Default is an empty list.
 
-    ext_p = {}
+    Returns
+    -------
+    list
+        A list of dictionaries representing the processed items. Each dictionary contains at least an 'id' key.
+        Additional keys may include 'qty' for quantity or 'deleted' to indicate removal.
+    """
 
+    items = []  # List to store the processed items.
+    sp = False  # Flag to indicate if the main plan is present in the items.
+    cd = False  # Flag to indicate if any item has been marked as deleted. (NOT USED)
+
+    ext_p = {}  # Dictionary to store extension prices' by id and their quantities.
+
+    # Populate the ext_p dictionary with price id and quantity from extensions.
     for ext in extensions:
         ext_p[ext["price"].id] = ext["qty"]
 
+    # Iterate through each item in obj["items"].data.
     for item in obj["items"].data:
-        product = {"id": item.id}
+        product = {"id": item.id}  # Create a product dictionary with the item's ID.
 
+        # Check if the item's price ID is neither the main plan ID nor in extensions.
         if item.price.id != main_plan.id and item.price.id not in ext_p:
-            product["deleted"] = True
-            cd = True
+            product["deleted"] = True  # Mark the product as deleted.
+            cd = True  # Set the condition deleted flag to True.
+        # Check if the item's price ID is in the extensions.
         elif item.price.id in ext_p:
-            qty = ext_p[item.price.id]
+            qty = ext_p[item.price.id]  # Get the quantity from extensions.
             if qty < 1:
-                product["deleted"] = True
+                product["deleted"] = (
+                    True  # Mark the product as deleted if quantity is less than 1.
+                )
             else:
-                product["qty"] = qty
-            del ext_p[item.price.id]
+                product["qty"] = qty  # Set the product's quantity.
+            del ext_p[item.price.id]  # Remove the processed extension.
+        # Check if the item's price ID is the main plan ID.
         elif item.price.id == main_plan.id:
-            sp = True
+            sp = True  # Set the plan flag to True.
 
-        items.append(product)
+        items.append(product)  # Add the processed product to the items list.
 
+    # If the main plan is not present, add it with a quantity of 1.
     if not sp:
         items.append({"id": main_plan.id, "qty": 1})
 
+    # Add any remaining valid extensions to the items list.
     for price, qty in ext_p.items():
         if qty < 1:
-            continue
-        items.append({"id": price, "qty": qty})
+            continue  # Skip if the quantity is less than 1.
+        items.append({"id": price, "qty": qty})  # Add the extension with its quantity.
 
     return items
 
