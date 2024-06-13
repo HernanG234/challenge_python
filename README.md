@@ -15,6 +15,8 @@ BUT we can run the tests provided to see that it's working code.
     $ make test
 ```
 
+> OR
+
 2. Using `docker-compose`:
 ```bash
     $ docker compose build
