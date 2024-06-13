@@ -1,6 +1,6 @@
 import boto3
 from moto import mock_aws
-from challenge.challenge_python import get_s3_objects
+from challenge.challenge_python import get_s3_objects, fn_caller
 
 
 @mock_aws
@@ -44,8 +44,18 @@ def test_fn():
     pass
 
 
-def test_Caller():
-    pass
+def test_fn_caller():
+    ret = fn_caller("add", 1, 2)
+    assert ret == 3
+
+    ret = fn_caller("concat", 1, 2)
+    assert ret == "1,2"
+
+    ret = fn_caller("divide", 10, 2)
+    assert ret == 5
+
+    ret = fn_caller("multiply", 2, 3)
+    assert ret == 6
 
 
 def test_fn_transcoder():

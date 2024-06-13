@@ -111,7 +111,7 @@ class Caller:
     multiply = lambda a, b: a * b
 
 
-def fn(fn_to_call, *args):
+def fn_caller(fn_to_call, *args):
     result = None
 
     if fn_to_call == "add":
