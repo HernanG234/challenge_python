@@ -191,7 +191,26 @@ class Helper:
         "refresh_token": None,
     }
 
-    def search_images(self, **kwargs):
+    def _make_api_call(self, endpoint, method="get", params=None, data=None):
+        """
+        Makes an API call to the specified endpoint using the given method.
+
+        Parameters
+        ----------
+        endpoint : str
+            The API endpoint to call.
+        method : str
+            The HTTP method to use for the request ('get' or 'post').
+        params : dict, optional
+            The URL parameters to send with the request.
+        data : dict, optional
+            The data to send with the request (for POST requests).
+
+        Returns
+        -------
+        requests.Response
+            The response from the API call.
+        """
         token_type = self.AUTHORIZATION_TOKEN["token_type"]
         access_token = self.AUTHORIZATION_TOKEN["access_token"]
 
@@ -199,39 +218,29 @@ class Helper:
             "Authorization": f"{token_type} {access_token}",
         }
 
-        URL = f"{self.DOMAIN}/{self.SEARCH_IMAGES_ENDPOINT}"
+        url = f"{self.DOMAIN}/{endpoint}"
+        send = {"headers": headers, "params": params, "data": data}
 
-        send = {"headers": headers, "params": kwargs}
+        if method.lower() == "get":
+            response = requests.get(url, headers=send["headers"], params=send["params"])
+        elif method.lower() == "post":
+            response = requests.post(url, headers=send["headers"], data=send["data"])
+        else:
+            raise ValueError("Unsupported HTTP method")
 
-        response = requests.get(URL, **send)
         return response
+
+    def search_images(self, **kwargs):
+        return self._make_api_call(
+            self.SEARCH_IMAGES_ENDPOINT, method="get", params=kwargs
+        )
 
     def get_image(self, image_id, **kwargs):
-        token_type = self.AUTHORIZATION_TOKEN["token_type"]
-        access_token = self.AUTHORIZATION_TOKEN["access_token"]
-
-        headers = {
-            "Authorization": f"{token_type} {access_token}",
-        }
-
-        URL = f"{self.DOMAIN}/{self.GET_IMAGE_ENDPOINT}/{image_id}"
-
-        send = {"headers": headers, "params": kwargs}
-
-        response = requests.get(URL, **send)
-        return response
+        return self._make_api_call(
+            f"{self.GET_IMAGE_ENDPOINT}/{image_id}", method="get", params=kwargs
+        )
 
     def download_image(self, image_id, **kwargs):
-        token_type = self.AUTHORIZATION_TOKEN["token_type"]
-        access_token = self.AUTHORIZATION_TOKEN["access_token"]
-
-        headers = {
-            "Authorization": f"{token_type} {access_token}",
-        }
-
-        URL = f"{self.DOMAIN}/{self.DOWNLOAD_IMAGE_ENDPOINT}/{image_id}"
-
-        send = {"headers": headers, "data": kwargs}
-
-        response = requests.post(URL, **send)
-        return response
+        return self._make_api_call(
+            f"{self.DOWNLOAD_IMAGE_ENDPOINT}/{image_id}", method="post", data=kwargs
+        )
