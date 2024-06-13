@@ -92,8 +92,44 @@ def test_Helper_search_images(helper, requests_mock):
 
 
 def test_Helper_get_image(helper, requests_mock):
-    pass
+    requests_mock.get(
+        f"{helper.DOMAIN}/{helper.GET_IMAGE_ENDPOINT}/1",
+        json={"url": "https://s3.download/fakeid"},
+        status_code=200,
+    )
+    ret = helper.get_image(1)
+
+    assert ret.status_code == 200
+    assert ret.json() == {"url": "https://s3.download/fakeid"}
+
+    requests_mock.get(
+        f"{helper.DOMAIN}/{helper.GET_IMAGE_ENDPOINT}/2",
+        json={"url": "Not Found"},
+        status_code=404,
+    )
+    ret = helper.get_image(2)
+
+    assert ret.status_code == 404
+    assert ret.json() == {"url": "Not Found"}
 
 
 def test_Helper_download_image(helper, requests_mock):
-    pass
+    requests_mock.post(
+        f"{helper.DOMAIN}/{helper.DOWNLOAD_IMAGE_ENDPOINT}/1",
+        json={"url": "https://s3.download/fakeid"},
+        status_code=200,
+    )
+    ret = helper.download_image(1)
+
+    assert ret.status_code == 200
+    assert ret.json() == {"url": "https://s3.download/fakeid"}
+
+    requests_mock.post(
+        f"{helper.DOMAIN}/{helper.DOWNLOAD_IMAGE_ENDPOINT}/2",
+        json={"url": "Not Found"},
+        status_code=404,
+    )
+    ret = helper.download_image(2)
+
+    assert ret.status_code == 404
+    assert ret.json() == {"url": "Not Found"}
